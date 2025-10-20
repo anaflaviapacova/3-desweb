@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Consulta de Dados via API</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #1e1e2f;
+      color: #e4e4f0;
+      margin: 0;
+      padding: 40px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    h1 {
+      color: #ffffff;
+      margin-bottom: 30px;
+    }
+
+    button {
+      background-color: #3b82f6;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      font-size: 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-bottom: 40px;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #2563eb;
+    }
+
+    .container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 30px;
+      max-width: 1200px;
+      width: 100%;
+    }
+
+    .card {
+      background-color: #2a2a40;
+      border-radius: 16px;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+      padding: 25px;
+      width: 280px;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+
+    .card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.5);
+    }
+
+    .card h3 {
+      margin-top: 0;
+      color: #ffffff;
+      font-size: 20px;
+      margin-bottom: 15px;
+    }
+
+    .info-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .info-list li {
+      margin-bottom: 10px;
+      color: #c2c2d6;
+      font-size: 15px;
+      display: flex;
+      align-items: center;
+    }
+
+    .info-list li span {
+      margin-right: 8px;
+      font-size: 18px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Contatos Registrados</h1>
+  <button id="loadBtn">Carregar Contatos</button>
+
+  <div class="container" id="userContainer"></div>
+
+  <script>
+    const button = document.getElementById('loadBtn');
+    const container = document.getElementById('userContainer');
+    const url = "https://jsonplaceholder.typicode.com/users";
+
+    button.addEventListener('click', () => {
+      fetch(url)
+        .then(response => response.json())
+        .then(data => {
+          container.innerHTML = ""; // Limpa cards anteriores
+
+          data.forEach(user => {
+            const card = document.createElement('div');
+            card.classList.add('card');
+
+            card.innerHTML = `
+              <h3>${user.name}</h3>
+              <ul class="info-list">
+                <li><span>📧</span><strong>Email:</strong> ${user.email}</li>
+                <li><span>📍</span><strong>Cidade:</strong> ${user.address.city}</li>
+                <li><span>🏠</span><strong>Rua:</strong> ${user.address.street}</li>
+                <li><span>📞</span><strong>Telefone:</strong> ${user.phone}</li>
+              </ul>
+            `;
+            container.appendChild(card);
+          });
+        })
+        .catch(error => {
+          console.error("Erro ao carregar dados:", error);
+        });
+    });
+  </script>
+
+</body>
+</html>
